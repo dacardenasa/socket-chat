@@ -1,11 +1,12 @@
 const { Router } = require("express");
+const { check } = require("express-validator");
+
 const {
   fetchUsers,
   createUser,
   updateUser,
   deleteUser
 } = require("../controllers/user");
-const { check } = require("express-validator");
 const { validateFields } = require("../middlewares/validate-fields");
 const {
   validateAccountRole,
