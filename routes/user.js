@@ -5,8 +5,8 @@ const {
   createUser,
   deleteUser,
   fetchUsers,
-  updateUser,
-} = require("../controllers/user");
+  updateUser
+} = require("../controllers");
 
 const { validateFields, validarJWT, hasRole } = require("../middlewares");
 
@@ -14,7 +14,7 @@ const {
   validateAccountRole,
   validateAccountByEmail,
   validateAccountById
-} = require("../helpers/db-validators");
+} = require("../helpers");
 
 const router = Router();
 
@@ -51,7 +51,6 @@ router.delete(
   "/:id",
   [
     validarJWT,
-    // validateAdminRole,
     hasRole("ADMIN_ROLE", "SELLER_ROLE"),
     check("id", "The id is not valid").isMongoId(),
     check("id").custom(validateAccountById),

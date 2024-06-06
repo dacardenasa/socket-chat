@@ -1,11 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Access Denied</title>
-</head>
-<body>
-    <h1>Access Denied</h1>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Google Sign-in</title>
+  </head>
+  <body>
+    <h1>Google Sign-in</h1>
+    <hr />
+    <div
+      id="g_id_onload"
+      data-client_id="141870114672-18kdri5d66l7nhi7fheqvf1ujombjhj8.apps.googleusercontent.com"
+      data-callback="handleCredentialResponse"
+      data-auto_prompt="false"
+    >
+    </div>
+    </div>
+    <div
+      class="g_id_signin"
+      data-type="standard"
+      data-size="large"
+      data-theme="outline"
+      data-text="sign_in_with"
+      data-shape="rectangular"
+      data-logo_alignment="left"
+    ></div>
+    <button id="google_sigout">Signout</button>
+    <script src="https://accounts.google.com/gsi/client" async></script>
+    <script>
+      function handleCredentialResponse(response) {
+        const body = { id_token: response.credential }
+        fetch("https://rest-server-nodejs.onrender.com/api/auth/google", {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify(body)
+          })
+          .then(res => res.json())
+          .then(res => {
+            localStorage.setItem("email", res.user.email);
+            location.reload();
+          })
+          .catch(error => console.log(error))
+      }
+
+      const button = document.getElementById("google_sigout");
+      button.onclick = () => {
+        if (localStorage.getItem("email")) {
+          google.accounts.id.disableAutoSelect();
+          google.accounts.id.revoke(localStorage.getItem("email"), done => {
+            localStorage.clear();
+            location.reload();
+          });
+        }
+      }
+    </script>
+  </body>
 </html>
