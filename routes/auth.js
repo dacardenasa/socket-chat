@@ -10,7 +10,7 @@ router.post(
   "/login",
   [
     check("email", "The email is required").isEmail(),
-    check("password", "The password is required").not().isEmpty(),
+    check("password", "The password is required").notEmpty(),
     validateFields
   ],
   login
@@ -18,10 +18,7 @@ router.post(
 
 router.post(
   "/google",
-  [
-    check("id_token", "Google token is required").not().isEmpty(),
-    validateFields
-  ],
+  [check("id_token", "Google token is required").notEmpty(), validateFields],
   googleSignIn
 );
 
