@@ -1,10 +1,9 @@
 const { response, request } = require("express");
 const bcrypt = require("bcryptjs");
-
-const User = require("../models/user");
+const { User } = require("../models");
 
 const fetchUsers = async (req = request, res = response) => {
-  const { q, page = 1, limit = 10 } = req.query;
+  const { page = 1, limit = 10 } = req.query;
   const previousRecords = (Number(page) - 1) * Number(limit);
   const query = {
     state: true
