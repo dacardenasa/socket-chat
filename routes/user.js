@@ -8,7 +8,12 @@ const {
   updateUser
 } = require("../controllers");
 
-const { validateFields, hasRole, validateJWT } = require("../middlewares");
+const {
+  validateFields,
+  hasRole,
+  validateJWT,
+  isAccountActivated
+} = require("../middlewares");
 
 const {
   hasUserRole,
@@ -39,6 +44,8 @@ router.post(
 router.put(
   "/:id",
   [
+    validateJWT,
+    isAccountActivated,
     check("id", "The id is not valid").isMongoId(),
     check("id").custom(isUserRegisteredById),
     check("role").custom(hasUserRole),
@@ -51,7 +58,8 @@ router.delete(
   "/:id",
   [
     validateJWT,
-    hasRole("ADMIN_ROLE", "SELLER_ROLE"),
+    isAccountActivated,
+    hasRole("ADMIN_ROLE"),
     check("id", "The id is not valid").isMongoId(),
     check("id").custom(isUserRegisteredById),
     validateFields

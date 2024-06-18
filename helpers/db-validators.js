@@ -14,6 +14,32 @@ async function isUserRegisteredByEmail(email = "") {
   }
 }
 
+async function isUserAccountRegistered(email = "") {
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw new Error("The email is not registered in our DB!");
+  }
+}
+
+async function isUserAccountActive(email = "") {
+  const user = await User.findOne({ email });
+  if (!user.state) {
+    throw new Error(`The user ${email} is disabled!`);
+  }
+}
+
+
+async function isUserAccountVerified(email = "") {
+  const user = await User.findOne({ email });
+
+  if (!user.isAccountVerified) {
+    throw new Error(
+      `The account is not activated, please check your email to activate it!`
+    );
+  }
+}
+
+
 async function isUserRegisteredById(id = "") {
   const isAccountAlreadyRegistered = await User.findById(id);
   if (!isAccountAlreadyRegistered) {
@@ -37,6 +63,9 @@ async function isProductRegistered(id = "") {
 
 module.exports = {
   hasUserRole,
+  isUserAccountRegistered,
+  isUserAccountActive,
+  isUserAccountVerified,
   isUserRegisteredByEmail,
   isUserRegisteredById,
   isCategoryRegistered,
