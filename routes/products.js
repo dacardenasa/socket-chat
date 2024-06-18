@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const { check } = require("express-validator");
 
-const { validateFields, validateJWT, hasRole } = require("../middlewares");
+const { validateFields, validateJWT, hasRole, isAccountActivated } = require("../middlewares");
 const {
   getProducts,
   createProduct,
@@ -27,6 +27,7 @@ router.post(
   "/",
   [
     validateJWT,
+    isAccountActivated,
     check("name", "The field name is required").notEmpty(),
     check("category", "Must be a mongoose category id valid!").isMongoId(),
     validateFields
@@ -37,6 +38,7 @@ router.put(
   "/:id",
   [
     validateJWT,
+    isAccountActivated,
     check("id", "Must be a mongoose id valid!").isMongoId(),
     check("category", "Must be a mongoose category id valid!").isMongoId(),
     check("id").custom(isProductRegistered),
@@ -48,6 +50,7 @@ router.delete(
   "/:id",
   [
     validateJWT,
+    isAccountActivated,
     hasRole("ADMIN_ROLE", "SELLER_ROLE"),
     check("id", "Must be a mongoose id valid!").isMongoId(),
     check("id").custom(isProductRegistered),

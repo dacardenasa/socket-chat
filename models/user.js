@@ -28,6 +28,10 @@ const UserSchema = Schema({
   google: {
     type: Boolean,
     default: false
+  },
+  isAccountVerified: {
+    type: Boolean,
+    default: false
   }
 });
 
