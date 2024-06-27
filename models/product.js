@@ -20,6 +20,9 @@ const ProductSchema = Schema({
     ref: "Category",
     required: true
   },
+  imageURI: {
+    type: String,
+  },
   user: {
     type: Schema.Types.ObjectId,
     ref: "User",
@@ -35,8 +38,8 @@ const ProductSchema = Schema({
 });
 
 ProductSchema.methods.toJSON = function () {
-  const { __v, state, ...restProduct } = this.toObject();
-  return restProduct;
+  const { __v, state, _id, ...restProduct } = this.toObject();
+  return { ...restProduct, uid: _id };
 };
 
 module.exports = model("Product", ProductSchema);
