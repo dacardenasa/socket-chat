@@ -28,7 +28,6 @@ async function isUserAccountActive(email = "") {
   }
 }
 
-
 async function isUserAccountVerified(email = "") {
   const user = await User.findOne({ email });
 
@@ -38,7 +37,6 @@ async function isUserAccountVerified(email = "") {
     );
   }
 }
-
 
 async function isUserRegisteredById(id = "") {
   const isAccountAlreadyRegistered = await User.findById(id);
@@ -61,6 +59,16 @@ async function isProductRegistered(id = "") {
   }
 }
 
+function isCollectionRegistered(collection = "", collections = []) {
+  const isCollectionIncluded = collections.includes(collection);
+  if (!isCollectionIncluded) {
+    throw new Error(
+      `The collection ${collection} is not allowed, collections allowed ${collections}`
+    );
+  }
+  return true;
+}
+
 module.exports = {
   hasUserRole,
   isUserAccountRegistered,
@@ -69,5 +77,6 @@ module.exports = {
   isUserRegisteredByEmail,
   isUserRegisteredById,
   isCategoryRegistered,
+  isCollectionRegistered,
   isProductRegistered
 };

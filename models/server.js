@@ -1,7 +1,8 @@
 const express = require("express");
+const fileUpload = require("express-fileupload");
+
 const cors = require("cors");
 const { connectMongoDB } = require("../database/config");
-
 class Server {
   constructor() {
     this.app = express();
@@ -25,14 +26,21 @@ class Server {
     this.app.use(express.json());
     // Public directory
     this.app.use(express.static("public"));
+    // File upload
+    this.app.use(fileUpload({
+      useTempFiles : true,
+      tempFileDir : '/tmp/',
+      createParentPath : true
+  }));
   }
 
   routes() {
     this.app.use("/api/auth", require("../routes/auth"));
-    this.app.use("/api/users", require("../routes/user"));
     this.app.use("/api/categories", require("../routes/categories"));
     this.app.use("/api/products", require("../routes/products"));
     this.app.use("/api/search", require("../routes/search"));
+    this.app.use("/api/uploads", require("../routes/uploads"));
+    this.app.use("/api/users", require("../routes/user"));
   }
 
   listen() {
