@@ -2,11 +2,16 @@ const express = require("express");
 const fileUpload = require("express-fileupload");
 
 const cors = require("cors");
+const { createServer } = require("http");
+
 const { connectMongoDB } = require("../database/config");
+const { socketController } = require("../sockets/controller");
 class Server {
   constructor() {
     this.app = express();
     this.port = process.env.PORT;
+    this.server = createServer(this.app);
+    this.io = require("socket.io")(this.server);
     // Connect DB
     this.connectDB();
     // Midlewares
@@ -27,11 +32,15 @@ class Server {
     // Public directory
     this.app.use(express.static("public"));
     // File upload
-    this.app.use(fileUpload({
-      useTempFiles : true,
-      tempFileDir : '/tmp/',
-      createParentPath : true
-  }));
+    this.app.use(
+      fileUpload({
+        useTempFiles: true,
+        tempFileDir: "/tmp/",
+        createParentPath: true
+      })
+    );
+    // Sockets
+    this.sockets();
   }
 
   routes() {
@@ -43,8 +52,12 @@ class Server {
     this.app.use("/api/users", require("../routes/user"));
   }
 
+  sockets() {
+    this.io.on("connection", socketController);
+  }
+
   listen() {
-    this.app.listen(this.port, () =>
+    this.server.listen(this.port, () =>
       console.log(`Listening on port ${this.port}`)
     );
   }
