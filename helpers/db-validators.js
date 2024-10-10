@@ -30,7 +30,6 @@ async function isUserAccountActive(email = "") {
 
 async function isUserAccountVerified(email = "") {
   const user = await User.findOne({ email });
-
   if (!user.isAccountVerified) {
     throw new Error(
       `The account is not activated, please check your email to activate it!`

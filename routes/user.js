@@ -34,8 +34,8 @@ router.post(
       "The pasword is required y must have more than 6 characters"
     ).isLength({ min: 6 }),
     check("email", "The email address is not valid").isEmail(),
-    check("email").custom(isUserRegisteredByEmail),
-    check("role").custom(hasUserRole),
+    // check("email").custom(isUserRegisteredByEmail),
+    // check("role").custom(hasUserRole),
     validateFields
   ],
   createUser

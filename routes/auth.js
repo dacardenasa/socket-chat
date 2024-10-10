@@ -4,9 +4,10 @@ const { check } = require("express-validator");
 const {
   login,
   googleSignIn,
-  validateAccountByEmail
+  validateAccountByEmail,
+  updateToken
 } = require("../controllers");
-const { validateFields } = require("../middlewares");
+const { validateFields, validateJWT } = require("../middlewares");
 const {
   isUserAccountActive,
   isUserAccountRegistered,
@@ -15,14 +16,16 @@ const {
 
 const router = Router();
 
+router.get("/", validateJWT, updateToken);
+
 router.post(
   "/login",
   [
     check("email", "The email is required").isEmail(),
     check("password", "The password is required").notEmpty(),
-    check("email").custom(isUserAccountRegistered),
-    check("email").custom(isUserAccountActive),
-    check("email").custom(isUserAccountVerified),
+    // check("email").custom(isUserAccountRegistered),
+    // check("email").custom(isUserAccountActive),
+    // check("email").custom(isUserAccountVerified),
     validateFields
   ],
   login
@@ -40,7 +43,8 @@ router.post(
     check("email", "You must send the email").notEmpty(),
     check("email").custom(isUserAccountRegistered),
     check("email").custom(isUserAccountActive),
-    validateFields],
+    validateFields
+  ],
   validateAccountByEmail
 );
 

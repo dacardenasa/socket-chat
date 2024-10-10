@@ -1,9 +1,16 @@
-const { Socket } = require("socket.io")
+const { Socket } = require("socket.io");
+const { fetchUserWithToken } = require("../helpers");
 
-const socketController = (socket = new Socket()) => {
-    console.info("new client connected", socket.id);
-}
+const socketController = async (socket = new Socket()) => {
+  const user = await fetchUserWithToken(socket.handshake.headers["x-token"]);
+  console.info({ user })
+  if (!user) {
+    return socket.disconnect();
+  }
+
+  console.info(`The user ${user.name} is connected`);
+};
 
 module.exports = {
-    socketController
-}
+  socketController
+};
