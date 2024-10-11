@@ -1,4 +1,7 @@
-const { Role, User, Category, Product } = require("../models");
+const User = require("../models/user");
+const Role = require("../models/role");
+const Category = require("../models/category");
+const Product = require("../models/product");
 
 async function hasUserRole(role = "") {
   const roleExists = await Role.findOne({ role });

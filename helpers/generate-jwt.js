@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const { User } = require("../models");
+const User = require("../models/user");
 
 function generateJWT(uid = "") {
   return new Promise((resolve, reject) => {
@@ -23,9 +23,7 @@ async function fetchUserWithToken(token = "") {
       return null;
     }
     const { uid } = jwt.verify(token, process.env.SECRETORPRIVATEKEY);
-    console.info({uid})
     const user = await User.findById(uid);
-    console.info({user})
 
     if (!user) {
       return null;
@@ -37,6 +35,7 @@ async function fetchUserWithToken(token = "") {
 
     return user;
   } catch (error) {
+    console.info(error);
     return null;
   }
 }

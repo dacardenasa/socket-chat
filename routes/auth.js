@@ -23,9 +23,9 @@ router.post(
   [
     check("email", "The email is required").isEmail(),
     check("password", "The password is required").notEmpty(),
-    // check("email").custom(isUserAccountRegistered),
-    // check("email").custom(isUserAccountActive),
-    // check("email").custom(isUserAccountVerified),
+    check("email").custom(isUserAccountRegistered),
+    check("email").custom(isUserAccountActive),
+    check("email").custom(isUserAccountVerified),
     validateFields
   ],
   login
