@@ -1,4 +1,7 @@
-const { Role, User, Category, Product } = require("../models");
+const User = require("../models/user");
+const Role = require("../models/role");
+const Category = require("../models/category");
+const Product = require("../models/product");
 
 async function hasUserRole(role = "") {
   const roleExists = await Role.findOne({ role });
@@ -30,7 +33,6 @@ async function isUserAccountActive(email = "") {
 
 async function isUserAccountVerified(email = "") {
   const user = await User.findOne({ email });
-
   if (!user.isAccountVerified) {
     throw new Error(
       `The account is not activated, please check your email to activate it!`

@@ -65,7 +65,7 @@ async function googleSignIn(req, res = response) {
   }
 }
 
-async function validateAccountByEmail(req = request, res = response, next) {
+async function validateAccountByEmail(req = request, res = response) {
   const { email } = req.body;
   try {
     const user = await User.findOneAndUpdate(
@@ -82,8 +82,16 @@ async function validateAccountByEmail(req = request, res = response, next) {
   }
 }
 
+async function updateToken(req = request, res = response) {
+  const { authUser: user } = req;
+
+  const token = await generateJWT(user._id);
+  res.json({ user, token });
+}
+
 module.exports = {
   login,
   googleSignIn,
+  updateToken,
   validateAccountByEmail
 };

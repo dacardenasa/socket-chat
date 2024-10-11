@@ -31,39 +31,20 @@
           data-shape="rectangular"
           data-logo_alignment="left"
         ></div>
-        <div class="mt-3" />
+        <div class="mt-3"></div>
         <button class="btn btn-primary" id="google_sigout">Signout</button>
       </div>
-      <div class="col-sm-6"></div>
+      <div class="col-sm-6">
+        <h1>Service Sign-in</h1>
+        <hr />
+        <form class="d-grid">
+          <input type="email" name="email" class="form-control mb-2" placeholder="email" />
+          <input type="password" name="password" class="form-control mb-3" placeholder="password" />
+          <button type="submit" class="btn btn-primary">Login</button>
+        </form>
+      </div>
     </div>
     <script src="https://accounts.google.com/gsi/client" async></script>
-    <script>
-      function handleCredentialResponse(response) {
-        const body = { id_token: response.credential };
-        fetch("https://rest-server-nodejs.onrender.com/api/auth/google", {
-          method: "POST",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify(body)
-        })
-          .then((res) => res.json())
-          .then((res) => {
-            localStorage.setItem("email", res.user.email);
-            location.reload();
-          })
-          .catch((error) => console.log(error));
-      }
-
-      const button = document.getElementById("google_sigout");
-
-      button.onclick = () => {
-        if (localStorage.getItem("email")) {
-          google.accounts.id.disableAutoSelect();
-          google.accounts.id.revoke(localStorage.getItem("email"), (done) => {
-            localStorage.clear();
-            location.reload();
-          });
-        }
-      };
-    </script>
+    <script src="./js/auth.js"></script>
   </body>
 </html>
